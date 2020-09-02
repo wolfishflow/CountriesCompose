@@ -4,32 +4,45 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.setContent
+import androidx.lifecycle.LiveData
 import androidx.ui.tooling.preview.Preview
+import androidx.ui.tooling.preview.PreviewParameter
 import dagger.hilt.android.AndroidEntryPoint
+import wolfishflow.countriescompose.data.models.Country
 import wolfishflow.countriescompose.ui.theme.CountriesComposeTheme
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CountriesComposeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
-                //todo remove this once proper mvvm is setup
-                viewModel.retrieveCanada()
-            }
+            LiveDataComposable(countriesLiveDataList = viewModel.countriesList)
         }
     }
+}
+
+@Composable
+fun LiveDataComposable(countriesLiveDataList: LiveData<List<Country>>) {
+    val countries by countriesLiveDataList.observeAsState(initial = emptyList())
+
+    if (countries.isEmpty()) {
+        //todo loading???
+    } else {
+        RecyclerViewComposable(countries = countries)
+    }
+
 }
 
 @Composable
@@ -39,8 +52,25 @@ fun Greeting(name: String) {
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun RecyclerViewComposable(
+    @PreviewParameter(CountryPreviewProvider::class)
+    countries: List<Country>
+) {
     CountriesComposeTheme {
-        Greeting("Android")
+        Surface(color = MaterialTheme.colors.background) {
+            LazyColumnFor(items = countries) {
+                Column {
+//                    TODO figure out why coil is crashing
+//                     No static method CoilImage(Lcoil/request/ImageRequest;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V in class Ldev/chrisbanes/accompanist/coil/CoilKt; or its super classes (declaration of 'dev.chrisbanes.accompanist.coil.CoilKt' appears in /data/app/~~AdVXEBVPGd6k4lCy4WW1Wg==/wolfishflow.countriescompose-gBMgXNniToSb_Gti1szkLg==/base.apk)
+//                    Box(modifier = Modifier.gravity(Alignment.CenterVertically).then(Modifier.size(200.dp))) {
+//                        CoilImage(request = ImageRequest.Builder(ContextAmbient.current).data(it.flagImageUrl).decoder(SvgDecoder(ContextAmbient.current)).build())
+//                    }
+                    Text(text = it.name, style = MaterialTheme.typography.h6)
+                    Text(text = "Region: ${it.region}", style = MaterialTheme.typography.body1)
+                }
+            }
+        }
     }
+
 }
+

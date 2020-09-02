@@ -11,7 +11,7 @@ data class Country(
     val capital: String,
     val region: String,
     val subregion: String,
-    val population: String,
+    val population: Int,
     val demonym: String,
     val currencies: List<Currency>,
     @Json(name = "flag")
