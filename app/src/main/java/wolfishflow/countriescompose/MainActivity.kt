@@ -1,6 +1,7 @@
 package wolfishflow.countriescompose
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Text
 import androidx.compose.material.MaterialTheme
@@ -9,8 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.setContent
 import androidx.ui.tooling.preview.Preview
 import wolfishflow.countriescompose.ui.CountriesComposeTheme
+import wolfishflow.countriescompose.ui.MainViewModel
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -19,6 +24,8 @@ class MainActivity : AppCompatActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     Greeting("Android")
                 }
+                //todo remove this once proper mvvm is setup
+                viewModel.retrieveCanada()
             }
         }
     }
