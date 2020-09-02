@@ -1,4 +1,4 @@
-package wolfishflow.countriescompose.network
+package wolfishflow.countriescompose.data
 
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor

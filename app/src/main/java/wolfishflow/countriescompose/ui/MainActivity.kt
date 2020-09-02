@@ -1,4 +1,4 @@
-package wolfishflow.countriescompose
+package wolfishflow.countriescompose.ui
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -9,10 +9,9 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.setContent
 import androidx.ui.tooling.preview.Preview
-import wolfishflow.countriescompose.ui.CountriesComposeTheme
-import wolfishflow.countriescompose.ui.MainViewModel
+import wolfishflow.countriescompose.ui.theme.CountriesComposeTheme
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
     private val viewModel: MainViewModel by viewModels()
 

@@ -1,4 +1,4 @@
-package wolfishflow.countriescompose.api.models
+package wolfishflow.countriescompose.data.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -13,7 +13,7 @@ data class Country(
     val subregion: String,
     val population: String,
     val demonym: String,
-    val currencies: Array<Currency>,
+    val currencies: List<Currency>,
     @Json(name = "flag")
     val flagImageUrl: String
 )

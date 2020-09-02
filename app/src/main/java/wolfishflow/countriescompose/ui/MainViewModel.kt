@@ -1,25 +1,31 @@
 package wolfishflow.countriescompose.ui
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import wolfishflow.countriescompose.api.CountriesService
-import wolfishflow.countriescompose.api.models.Country
-import wolfishflow.countriescompose.network.NetworkClient
+import wolfishflow.countriescompose.data.CountriesService
+import wolfishflow.countriescompose.data.models.Country
+import wolfishflow.countriescompose.data.NetworkClient
 
-//TODO add Usecase class
+//TODO add contructor for repo class
 class MainViewModel : ViewModel() {
-
-    private suspend fun getCanada() : List<Country> {
-        val retrofit = NetworkClient().getRetrofit()
-        val service = retrofit.create(CountriesService::class.java)
-        return service.getCanada()
-    }
+    private val _countriesList = MutableLiveData<List<Country>>()
+    val countriesList: LiveData<List<Country>> get() = _countriesList
 
     fun retrieveCanada() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getCanada()
+        viewModelScope.launch {
+            val retrofit = NetworkClient().getRetrofit()
+            val service = retrofit.create(CountriesService::class.java)
+            val repo = MainRepository(service, Dispatchers.IO)
+
+            repo.getAllCountries()
+                .collect { countries ->
+                _countriesList.value = countries
+            }
         }
     }
 
