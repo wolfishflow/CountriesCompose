@@ -9,8 +9,10 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.setContent
 import androidx.ui.tooling.preview.Preview
+import dagger.hilt.android.AndroidEntryPoint
 import wolfishflow.countriescompose.ui.theme.CountriesComposeTheme
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(){
 
     private val viewModel: MainViewModel by viewModels()
