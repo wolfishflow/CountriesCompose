@@ -7,6 +7,7 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.Box
 import androidx.compose.foundation.ContentGravity
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,16 +15,22 @@ import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.ripple.RippleIndication
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.tooling.preview.PreviewParameter
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.accompanist.coil.CoilImageWithCrossfade
 import wolfishflow.countriescompose.data.models.Country
 import wolfishflow.countriescompose.ui.theme.CountriesComposeTheme
 
@@ -91,23 +98,37 @@ fun RecyclerViewComposable(
             LazyColumnFor(items = countries) { country ->
                 Card(
                     modifier = Modifier.fillParentMaxWidth().then(Modifier.padding(8.dp)),
+                    shape = RoundedCornerShape(8.dp),
                     elevation = 4.dp
                 ) {
-                    Column(modifier = Modifier.padding(8.dp)) {
-//                    TODO figure out why coil is crashing
-//                     No static method CoilImage(Lcoil/request/ImageRequest;Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;Landroidx/compose/ui/layout/ContentScale;Landroidx/compose/ui/graphics/ColorFilter;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V in class Ldev/chrisbanes/accompanist/coil/CoilKt; or its super classes (declaration of 'dev.chrisbanes.accompanist.coil.CoilKt' appears in /data/app/~~AdVXEBVPGd6k4lCy4WW1Wg==/wolfishflow.countriescompose-gBMgXNniToSb_Gti1szkLg==/base.apk)
-//                    Box(modifier = Modifier.gravity(Alignment.CenterVertically).then(Modifier.size(200.dp))) {
-//                        CoilImage(request = ImageRequest.Builder(ContextAmbient.current).data(country.flagImageUrl).decoder(SvgDecoder(ContextAmbient.current)).build())
-//                    }
-                        Surface(
-                            modifier = Modifier.fillMaxWidth().then(Modifier.height(100.dp)),
+                    Column(
+                        modifier = Modifier.clickable(
+                            onClick = {},
+                            indication = RippleIndication()
+                        ).then(
+                            Modifier.padding(8.dp)
+                        )
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxWidth().then(Modifier.height(150.dp)),
                             shape = RoundedCornerShape(8.dp),
-                            color = MaterialTheme.colors.primary.copy(alpha = 0.3f)
+                            backgroundColor = MaterialTheme.colors.primary
                         ) {
-                            //Coil would replace this
+                            CoilImageWithCrossfade(
+                                data = ImageRequest.Builder(ContextAmbient.current)
+                                    .data(country.flagImageUrl).allowHardware(false)
+                                    .decoder(
+                                        SvgDecoder(ContextAmbient.current)
+                                    ).build(),
+                                modifier = Modifier.fillMaxWidth().then(Modifier.fillMaxHeight()),
+                                contentScale = ContentScale.FillHeight
+                            )
                         }
 
+                        Spacer(modifier = Modifier.height(8.dp))
+
                         Text(text = country.name, style = MaterialTheme.typography.h6)
+
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -127,4 +148,9 @@ fun RecyclerViewComposable(
         }
     }
 }
+
+
+
+
+
 
