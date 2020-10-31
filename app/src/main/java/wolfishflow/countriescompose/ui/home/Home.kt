@@ -4,7 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.AmbientContentColor
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,10 +29,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
+import androidx.navigation.compose.rememberNavController
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.tooling.preview.PreviewParameter
 import coil.decode.SvgDecoder
@@ -111,39 +117,43 @@ fun CountryCard(country: Country) {
             )
         ) {
             Box(modifier = Modifier.wrapContentSize()) {
-                Column() {
-                    CoilImage(
-                        data = ImageRequest.Builder(ContextAmbient.current)
-                            .data(country.flagImageUrl)
-                            .allowHardware(true)
-                            .decoder(SvgDecoder(ContextAmbient.current))
-                            .build(),
-                        fadeIn = true,
-                        loading = { Loading() },
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.height(200.dp)
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(8.dp))
-                    )
-                    Column(
-                        modifier = Modifier.padding(
-                            start = 8.dp,
-                            end = 8.dp,
-                            top = 4.dp,
-                            bottom = 4.dp
+                CoilImage(
+                    data = ImageRequest.Builder(ContextAmbient.current)
+                        .data(country.flagImageUrl)
+                        .allowHardware(true)
+                        .decoder(SvgDecoder(ContextAmbient.current))
+                        .build(),
+                    fadeIn = true,
+                    loading = { Loading() },
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.height(250.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth().then(Modifier.align(Alignment.BottomStart))
+                        .then(
+                            Modifier.clip(
+                                RoundedCornerShape(bottomLeft = 8.dp, bottomRight = 8.dp)
+                            )
+                        ).then(
+                            Modifier.background(
+                                brush = SolidColor(MaterialTheme.colors.surface),
+                                alpha = 0.5f
+                            )
+                        ).then(Modifier.padding(8.dp))
+
+                ) {
+                    with(country) {
+                        Text(text = name, style = MaterialTheme.typography.h6)
+                        Text(
+                            text = "Capital: ${if (capital.isNotEmpty()) capital else "None"}",
+                            style = MaterialTheme.typography.body1
                         )
-                    ) {
-                        with(country) {
-                            Text(text = name, style = MaterialTheme.typography.h6)
-                            Text(
-                                text = "Capital: ${if (capital.isNotEmpty()) capital else "None"}",
-                                style = MaterialTheme.typography.body1
-                            )
-                            Text(
-                                text = "Region: ${if (region.isNotEmpty()) region else "None"}",
-                                style = MaterialTheme.typography.body1
-                            )
-                        }
+                        Text(
+                            text = "Region: ${if (region.isNotEmpty()) region else "None"}",
+                            style = MaterialTheme.typography.body1
+                        )
                     }
                 }
             }
