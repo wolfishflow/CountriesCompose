@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.platform.setContent
 import dagger.hilt.android.AndroidEntryPoint
-import wolfishflow.countriescompose.ui.composables.HomeScreen
+import wolfishflow.countriescompose.ui.home.HomeScreen
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

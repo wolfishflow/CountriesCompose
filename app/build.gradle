@@ -71,13 +71,16 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.navigation:navigation-compose:$nav_compose_version"
+
 
 //    Coil for Compose
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.2.1"
+    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.3.2"
     implementation "io.coil-kt:coil-svg:0.12.0"
 
 // Routing/Navigation
     implementation 'com.github.zsoltk:compose-router:0.18.0'
+    implementation 'androidx.palette:palette-ktx:1.0.0'
 
 //    DI
     kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
